@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv'); // Import dotenv
 const Token = require('./models/Token');
+const User = require('./models/User');
+
 dotenv.config(); // Load environment variables
 
 const app = express();
@@ -36,6 +38,17 @@ app.get('/tokens', async (req, res) => {
       res.status(500).json({ error: 'Error fetching tokens' });
     }
   });
+
+  // Route to get all users
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find().sort({ _id: -1 }); // Sort by _id in descending order
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+});
   
 
 // Start the server
